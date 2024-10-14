@@ -1,0 +1,112 @@
+<RoundedNormalButton>:
+    background_color: 0,0,0,0  # the last zero is the critical on, make invisible
+    bacground_normal: ''
+    canvas.before:
+        Color:
+            rgba: (0.482, 0.380, 1.0, 1) if self.state=='normal' else (0,.7,.7,1)
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [20,]
+
+
+
+<Inicio>
+    BoxLayout:
+        id: boxInicio
+        canvas.before:
+            Color:
+                rgba: 1,1,1,.5
+            Rectangle:
+                source: 'image/home.jpg'
+                pos: self.pos
+                size: self.size
+
+        orientation: 'vertical'
+        BoxLayout:
+            Image: 
+                source: 'image/logo.jpeg'
+        BoxLayout:
+        BoxLayout:
+            orientation: 'vertical'
+            BoxLayout:
+            BoxLayout:
+                orientation: 'horizontal'
+                BoxLayout:
+                    size_hint: .1,1
+                BoxLayout:
+                    size_hint: .8,1
+                    RoundedNormalButton:
+                        text: 'Inicio'
+                        on_release: root.go_login()
+
+                BoxLayout:
+                    size_hint: .1,1
+            BoxLayout:
+        
+
+<Login>
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,.5
+                Rectangle:
+                    source: 'image/home.jpg'
+                    pos: self.pos
+                    size: self.size
+            size_hint: 1,.4
+            Image: 
+                source: 'image/logo.jpeg'
+        BoxLayout:
+            size_hint: 1, .6
+            orientation: 'horizontal'
+            BoxLayout:
+                size_hint: .1,1
+            BoxLayout:
+                canvas.before:
+                    Color:
+                        rgba: (1, 1, 1, 1) 
+                    RoundedRectangle:
+                        pos: (self.x, self.y)
+                        size: (self.width, self.height + 40)
+                        radius: [20,]
+
+                size_hint: .8,1
+                BoxLayout:
+                    orientation: 'vertical'
+                    Label: 
+                        color: 0,0,0,1
+                        text: 'Bem-vindo'
+                    TextInput: 
+                        id: txtUsuario
+                    TextInput:
+                        id:txtPassword
+                        write_tab: False
+                        multiline: False
+                        password: True
+                    RoundedNormalButton:
+                        text: 'Inicio'
+                        on_release: root.validar_usuario()
+                    Label:
+                        color: 0,0,0,1
+                        text: 'Esqueceu sua senhia?'
+            BoxLayout:
+                size_hint: .1,1
+
+<Principal>
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            size_hint: 1,.1
+            Label:
+                text: 'encabezado'
+        BoxLayout:
+            size_hint: 1,.2
+            Label:
+                text: 'Botones'
+        BoxLayout:
+            size_hint: 1,.7
+            Label:
+                id: lblCarga
