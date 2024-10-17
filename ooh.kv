@@ -99,14 +99,188 @@
     BoxLayout:
         orientation: 'vertical'
         BoxLayout:
-            size_hint: 1,.1
-            Label:
-                text: 'encabezado'
+            size_hint: 1, .15
+            canvas.before:
+                Color:
+                    rgba: (0.1, 0.1, 0.1, 1)
+                Rectangle:
+                    pos: self.pos
+                    size: self.size      
+            orientation: 'horizontal'
+            BoxLayout:
+                size_hint: 0.2, 1
+                Image:
+                    source: 'image/logo_chico.png'
+                    allow_stretch: True
+                    keep_ratio: True
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+            BoxLayout:
+                size_hint: 0.6, 1  
+
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint: 0.2, 1
+                canvas.before:
+                    Color:
+                        rgba: (0.1, 0.1, 0.1, 1)  
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                BoxLayout:
+                    orientation: 'horizontal'
+                    padding: [20, 10, 20, 10]
+                    spacing: 10
+                    Label:
+                        text: 'Sair'
+                        font_size: 20
+                        color: (1, 1, 1, 1)
+                        size_hint_x: 1
+                        halign: 'left'  
+                        valign: 'middle'  
+                        text_size: self.size  
+                    Image:
+                        source: 'image/salir.png'
+                        size_hint: None, None
+                        size: 50, 50
+                        allow_stretch: True  
+                Label:
+                    text: 'Juan Gomez'
+                    font_size: 14
+                    color: (1, 1, 1, 1)
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                    minimum_height: 30                
+         
         BoxLayout:
-            size_hint: 1,.2
-            Label:
-                text: 'Botones'
+            size_hint: 1, .25  
+            canvas.before:
+                Color:
+                    rgba: 236,230,240,1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size      
+            orientation: 'horizontal'
+            padding: 20  
+            spacing: 20 
+            
+            # Parte 1
+            BoxLayout:
+                size_hint: 0.3, 1  
+                orientation: 'vertical'
+                padding: 10  
+                
+                canvas.before:
+                    Color:
+                        rgba: 0.5, 0.5, 0.5, 0.5  # sombra                   
+                    RoundedRectangle:
+                        pos: (self.x + 5, self.y - 5)  # desplazar de la sombra
+                        size: self.size
+                        radius: [20]
+                
+                canvas.before:
+                    Color:
+                        rgba: 0.9, 0.9, 1, 1 
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [20]
+                
+                Image:
+                    source: 'image/inst.png'
+                    allow_stretch: True
+                    keep_ratio: True
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.6}
+                Label:
+                    color: 0,0,0,1
+                    text: 'Check in'
+
+            # Parte 2
+            BoxLayout:
+                size_hint: 0.3, 1
+                orientation: 'vertical'
+                padding: 10  
+                
+                canvas.before:
+                    Color:
+                        rgba: 0.5, 0.5, 0.5, 0.5                      
+                    RoundedRectangle:
+                        pos: (self.x + 5, self.y - 5)  
+                        size: self.size
+                        radius: [20]
+                
+                canvas.before:
+                    Color:
+                        rgba: 0.9, 0.9, 1, 1  
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [20]
+                
+                Image:
+                    source: 'image/mant.png'
+                    allow_stretch: True
+                    keep_ratio: True
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.6}
+                Label:
+                    color: 0,0,0,1
+                    text: 'Manutenção'
+
+            # Parte 3
+            BoxLayout:
+                size_hint: 0.3, 1
+                orientation: 'vertical'
+                padding: 10  
+                
+                canvas.before:
+                    Color:
+                        rgba: 0.5, 0.5, 0.5, 0.5  
+                    # Dibuja la sombra ligeramente desplazada
+                    RoundedRectangle:
+                        pos: (self.x + 5, self.y - 5)  # Desplazamiento de la sombra
+                        size: self.size
+                        radius: [20]
+                
+                canvas.before:
+                    Color:
+                        rgba: 0.9, 0.9, 1, 1  # Color del botón
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [20]
+                
+                Image:
+                    source: 'image/desinst.png'
+                    allow_stretch: True
+                    keep_ratio: True
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.6}
+                Label:
+                    color: 0,0,0,1
+                    text: 'Desinstalação'
         BoxLayout:
-            size_hint: 1,.7
-            Label:
-                id: lblCarga
+            size_hint: 1, .6
+            canvas.before:
+                Color:
+                    rgba: 0.8, 0.8, 0.8, 1 
+                Rectangle:
+                    pos: self.pos
+                    size: self.size      
+            orientation: 'horizontal'
+            BoxLayout:
+                size_hint: 0.2, 1
+                Label:
+                    text: 'Parte 1'
+            BoxLayout:
+                size_hint: 0.5, 1
+                Label:
+                    text: 'Parte 2'
+            BoxLayout:
+                size_hint: 0.3, 1
+                Label:
+                    text: 'Parte 41'    
+
+        
+                   
+         
+
+                
+
