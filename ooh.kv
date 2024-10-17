@@ -1,3 +1,4 @@
+#:import VucanView vulcanview
 <RoundedNormalButton>:
     background_color: 0,0,0,0  # the last zero is the critical on, make invisible
     bacground_normal: ''
@@ -81,6 +82,9 @@
                         text: 'Bem-vindo'
                     TextInput: 
                         id: txtUsuario
+                        hint_text: 'Usuario'
+                        multiline: False
+                        write_tab: False
                     TextInput:
                         id:txtPassword
                         write_tab: False
@@ -256,27 +260,17 @@
                 Label:
                     color: 0,0,0,1
                     text: 'Desinstalação'
-        BoxLayout:
-            size_hint: 1, .6
-            canvas.before:
-                Color:
-                    rgba: 0.8, 0.8, 0.8, 1 
-                Rectangle:
-                    pos: self.pos
-                    size: self.size      
-            orientation: 'horizontal'
-            BoxLayout:
-                size_hint: 0.2, 1
-                Label:
-                    text: 'Parte 1'
-            BoxLayout:
-                size_hint: 0.5, 1
-                Label:
-                    text: 'Parte 2'
-            BoxLayout:
-                size_hint: 0.3, 1
-                Label:
-                    text: 'Parte 41'    
+        VulcanView:
+            id:vv
+            size_hint: 1,1
+            title_background_color: .47,.47,.47,1
+            title_text_color: 1,1,1,1
+            background_color: 1,1,1,1
+            text_color: 0,0,0,1
+            row_selection: True
+            on_selection: pass
+            cols_size_hint: {'0':.2, '1':.6, '2':.2 }
+            
 
         
                    
