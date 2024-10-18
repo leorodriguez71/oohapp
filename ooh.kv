@@ -10,9 +10,16 @@
             size: self.size
             radius: [20,]
 
-<CustomTextInput>:
+
+
+<CustomTextInput@FloatLayout>:
     password: False  # Propiedad para controlar si es un campo de contraseña
     text: ''  # Propiedad vinculada al texto del TextInput interno
+    max_chars: 0  # Sin límite de caracteres por defecto
+    input_type: 'text'  # Tipo de entrada por defecto es alfanumérico
+    max_decimals: 2  # Máximo de decimales si es numérico
+    error_message: ''  # Mensaje de error
+    required: False  # Si el campo es obligatorio o no
     canvas.before:
         Color:
             rgba: root.line_color
@@ -37,6 +44,16 @@
         padding: [10, 10, 10, 10]
         on_focus: root.update_line(self.focus)
         on_text: root.on_textinput_text(self, self.text)
+        on_text_validate: root.validate_text(self, self.text)
+
+    Label:
+        id: error_label
+        text: root.error_message
+        color: (1, 0, 0, 1)  # Color rojo para el mensaje de error
+        font_size: '14sp'
+        size_hint_y: None
+        height: self.texture_size[1] if root.error_message else 0  # Ocupa espacio solo si hay error
+        pos_hint: {'x': 0.05, 'top': 0.9}
 
 
             
@@ -65,7 +82,7 @@
                     size_hint: .1,1
                 BoxLayout:
                     size_hint: .8,1
-                    RoundedNormalButton:
+                    RoundedNormalButton: 
                         text: 'Inicio'
                         on_release: root.go_login()
 
@@ -296,7 +313,7 @@
             background_color: 1,1,1,1
             text_color: 0,0,0,1
             row_selection: True
-            on_selection: pass
+            on_selection: root.go_mant()
             cols_size_hint: {'0':.2, '1':.6, '2':.2 }
             
 
