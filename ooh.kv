@@ -10,8 +10,36 @@
             size: self.size
             radius: [20,]
 
+<CustomTextInput>:
+    password: False  # Propiedad para controlar si es un campo de contraseña
+    text: ''  # Propiedad vinculada al texto del TextInput interno
+    canvas.before:
+        Color:
+            rgba: root.line_color
+        Line:
+            width: root.line_width
+            points: [self.x + dp(10), self.y, self.x + self.width - dp(10), self.y]
+
+    TextInput:
+        id: input_field
+        hint_text: "Escribe aquí..."
+        hint_text_color: (0.7, 0.7, 0.7, 1)
+        foreground_color: (0, 0, 0, 1)
+        background_color: (1, 1, 1, 0)
+        password: root.password  # Activa el modo contraseña
+        size_hint_x: None
+        width: self.parent.width - dp(20)
+        size_hint_y: None
+        height: '40dp'
+        font_size: '18sp'
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        multiline: False
+        padding: [10, 10, 10, 10]
+        on_focus: root.update_line(self.focus)
+        on_text: root.on_textinput_text(self, self.text)
 
 
+            
 <Inicio>
     BoxLayout:
         id: boxInicio
@@ -80,12 +108,12 @@
                     Label: 
                         color: 0,0,0,1
                         text: 'Bem-vindo'
-                    TextInput: 
+                    CustomTextInput: 
                         id: txtUsuario
                         hint_text: 'Usuario'
                         multiline: False
                         write_tab: False
-                    TextInput:
+                    CustomTextInput:
                         id:txtPassword
                         write_tab: False
                         multiline: False

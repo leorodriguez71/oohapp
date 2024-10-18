@@ -1,14 +1,38 @@
 from kivy.app import App
-from kivymd.app import MDApp
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
-
+from kivy.uix.floatlayout import FloatLayout
+from kivy.properties import ColorProperty, NumericProperty, BooleanProperty, StringProperty
 import requests
 
 class RoundedNormalButton(Button):
     pass
+
+class CustomTextInput(FloatLayout):
+    line_color = ColorProperty((0.8, 0.8, 0.8, 1))  # Color gris claro por defecto
+    line_width = NumericProperty(1.5)  # Grosor de línea por defecto
+    password = BooleanProperty(False)  # Propiedad para activar/desactivar modo contraseña
+    text = StringProperty('')  # Propiedad para acceder al texto ingresado
+
+    def update_line(self, focused):
+        if focused:
+            self.line_color = (0, 0.6, 0.8, 1)  # Cambia a turquesa al enfocar
+            self.line_width = 2  # Aumenta el grosor de la línea
+        else:
+            self.line_color = (0.8, 0.8, 0.8, 1)  # Vuelve al color gris cuando no está enfocado
+            self.line_width = 1.5  # Grosor normal
+
+    def on_text(self, instance, value):
+        # Actualiza el TextInput interno cuando cambia la propiedad 'text'
+        self.ids.input_field.text = value
+
+    def on_textinput_text(self, instance, value):
+        # Sincroniza la propiedad 'text' con el contenido del TextInput
+        self.text = value
+
+
 
 class Inicio(Screen):
     def go_login(self):
