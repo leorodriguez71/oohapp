@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 kivy = "*"
 buildozer = "*"
+opencv-python = "*"
 
 [dev-packages]
 

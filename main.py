@@ -2,16 +2,58 @@ from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.textinput import TextInput
 from kivy.properties import ColorProperty, NumericProperty, BooleanProperty, StringProperty, OptionProperty, ObjectProperty
 import requests
 from kivy.animation import Animation
-from kivy.graphics import Color, RoundedRectangle 
+from kivy.graphics import Color, RoundedRectangle
+from kivy.graphics.texture import Texture
 from kivy.core.window import Window
-from kivy.uix.textinput import TextInput
+from kivy.clock import Clock
+import cv2
 class RoundedNormalButton(Button):
     pass
+
+
+class WidgetCamera(BoxLayout):
+    photo_name = StringProperty("foto.jpg")  # Propiedad para el nombre de la foto
+    button_text = StringProperty("Tomar foto")  # Texto del botón
+    image_texture = None
+
+    def __init__(self, **kwargs):
+        super(WidgetCamera, self).__init__(**kwargs)
+
+    def capture_photo(self):
+        # Configura la captura de video
+        self.capture = cv2.VideoCapture(0)
+
+        # Verifica si la cámara se abre correctamente
+        if not self.capture.isOpened():
+            print("Error: No se puede abrir la cámara.")
+            return
+
+        # Captura una imagen
+        ret, frame = self.capture.read()
+        if ret:
+            # Convierte la imagen a formato de textura
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            texture = Texture.create(size=(frame.shape[1], frame.shape[0]), colorfmt='rgb')
+            texture.blit_buffer(frame.tobytes(), colorfmt='rgb', bufferfmt='ubyte')
+            self.image_texture = texture
+            self.ids.camera_image.texture = self.image_texture
+            
+            # Guarda la foto
+            cv2.imwrite(self.photo_name, frame)
+
+        # Libera la cámara
+        self.capture.release()
+
+    def on_kill(self):
+        if self.capture and self.capture.isOpened():
+            self.capture.release()
 
 
 
@@ -28,6 +70,7 @@ class CustomTextInput(FloatLayout):
     write_tab = BooleanProperty(False)  # Si True, no pasa al siguiente textbox
     multiline = BooleanProperty(False)  # Si True, no pasa al siguiente textbox
     on_last_field = ObjectProperty(None)
+    hint_text = StringProperty('') 
 
     def __init__(self, **kwargs):
         super(CustomTextInput, self).__init__(**kwargs)
@@ -162,13 +205,13 @@ class Principal(Screen):
                     self.ids.vv.AddGrid(mant['direccion'], '')
                     self.ids.vv.AddGrid(mant['fecha'], '')
         else:
-            print('error')
             self.manager.current = 'Login'
             return
     def go_mant(self):
-        print('mantenimieto')
+        self.manager.current = 'Mantenimiento'
 
-
+class Mantenimiento(Screen):
+    pass
 
 class Login(Screen):
     def validar_usuario(self):
@@ -199,6 +242,7 @@ class OohApp(App):
         sm.add_widget(Inicio(name = "Inicio"))
         sm.add_widget(Login(name = "Login"))
         sm.add_widget(Principal(name = "Principal"))
+        sm.add_widget(Mantenimiento(name = "Mantenimiento"))
 
         return sm
 
