@@ -1,4 +1,5 @@
 #:import VucanView vulcanview
+#:import Calendar calendar.Calendar
 <RoundedNormalButton>:
     background_color: 0,0,0,0  # the last zero is the critical on, make invisible
     bacground_normal: ''
@@ -10,6 +11,42 @@
             size: self.size
             radius: [20,]
 
+<DatePicker>:
+    title: 'Selecciona una fecha'
+    size_hint: None, None
+    size: '400dp', '500dp'
+    auto_dismiss: False
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        BoxLayout:
+            size_hint_y: None
+            height: '50dp'
+
+            Button:
+                text: "<"
+                on_press: root.prev_month()
+
+            Label:
+                text: root.display_month_year
+                size_hint_x: 2
+
+            Button:
+                text: ">"
+                on_press: root.next_month()
+
+        GridLayout:
+            id: calendar_container
+            cols: 7
+            spacing: '5dp'
+            padding: '5dp'
+
+        Button:
+            size_hint_y: None
+            height: '40dp'
+            text: 'Cancelar'
+            on_press: root.dismiss()
 
 <WidgetCamera>:
     orientation: 'horizontal'
@@ -38,6 +75,7 @@
         height: self.texture_size[1] if not root.image_texture else 0  # Ocupa espacio solo si no hay foto
 
 <CustomTextInput>:
+    input_field: input_field
     password: False  # Propiedad para controlar si es un campo de contraseña
     text: ''  # Propiedad vinculada al texto del TextInput interno
     max_chars: 0  # Sin límite de caracteres por defecto
@@ -438,7 +476,8 @@
                         orientation: 'vertical'
                         CustomTextInput: 
                             id: txtFecha
-                            hint_text: 'Data execusao'
+                            hint_text: 'Fecha'
+                            on_focus: if self.input_field.focus: app.open_date_picker(self.input_field)
                         WidgetCamera:
 
                         CustomTextInput:

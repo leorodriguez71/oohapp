@@ -1,0 +1,62 @@
+<MyScreen>:
+    orientation: 'vertical'
+    padding: '10dp'
+    spacing: '10dp'
+
+    TextInput:
+        id: date_input
+        hint_text: "Selecciona una fecha"
+        multiline: False
+        readonly: True
+        on_focus: if self.focus: app.open_date_picker(self)
+
+    TextInput:
+        id: date_input2
+        hint_text: "Selecciona una fecha"
+        multiline: False
+        readonly: True
+        on_focus: if self.focus: app.open_date_picker(self)
+
+    TextInput:
+        id: date_input3
+        hint_text: "Selecciona una fecha"
+        multiline: False
+        readonly: True
+        on_focus: if self.focus: app.open_date_picker(self)
+
+<DatePicker>:
+    title: 'Selecciona una fecha'
+    size_hint: None, None
+    size: '400dp', '500dp'
+    auto_dismiss: False
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        BoxLayout:
+            size_hint_y: None
+            height: '50dp'
+
+            Button:
+                text: "<"
+                on_press: root.prev_month()
+
+            Label:
+                text: root.display_month_year
+                size_hint_x: 2
+
+            Button:
+                text: ">"
+                on_press: root.next_month()
+
+        GridLayout:
+            id: calendar_container
+            cols: 7
+            spacing: '5dp'
+            padding: '5dp'
+
+        Button:
+            size_hint_y: None
+            height: '40dp'
+            text: 'Cancelar'
+            on_press: root.dismiss()
