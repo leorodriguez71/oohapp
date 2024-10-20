@@ -16,6 +16,7 @@ from kivy.clock import Clock
 import cv2
 import calendar
 from datetime import datetime
+import re
 
 class RoundedNormalButton(Button):
     pass
@@ -124,7 +125,7 @@ class CustomTextInput(FloatLayout):
     password = BooleanProperty(False)  # Propiedad para activar/desactivar modo contraseña
     text = StringProperty('')  # Propiedad para acceder al texto ingresado
     max_chars = NumericProperty(0)  # Máximo de caracteres permitidos (0 para infinito)
-    input_type = OptionProperty('text', options=['text', 'numeric'])  # Tipo de entrada: texto o numérico
+    input_type = OptionProperty('text', options=['text', 'numeric', 'date', 'note'])  # Tipo de entrada: texto o numérico
     max_decimals = NumericProperty(0)  # Cantidad máxima de decimales permitidos si es numérico
     error_message = StringProperty('')  # Mensaje de error
     required = BooleanProperty(False)  # Propiedad que define si el campo es obligatorio
@@ -141,12 +142,23 @@ class CustomTextInput(FloatLayout):
         # Registrar el evento de teclado
         self.bind(input_field=self._connect_focus)
         Window.bind(on_key_down=self.on_key_down)
+        Clock.schedule_once(self.ejecutar_en_proximo_frame)
+
+    def ejecutar_en_proximo_frame(self, dt):
+        self.input_field.bind(text=self.validate_text)
+        if self.input_type == 'date':
+            self.input_field.bind(on_touch_down=self._on_touch_down)
+        elif self.input_type == 'note':
+            self.multiline = True  # Habilitar multiline
+            self.input_field.multiline = True
+            self.ids.input_field.height = '100dp'  # Aumentar la altura del TextInput
+            self.ids.input_field.size_hint_y = None  # Deshabilitar el ajuste de tamaño automático
+            self.ids.input_field.pos_hint = {'center_x': 0.5, 'center_y': 0.5}
 
     def _connect_focus(self, instance, value):
         """Conecta el 'focus' del TextInput interno con el CustomTextInput"""
         if self.input_field:
             self.input_field.bind(focus=self._on_focus)
-            self.input_field.bind(on_touch_down=self._on_touch_down)
 
     def _on_focus(self, instance, value):
         """Cuando el TextInput interno cambia de foco, actualizamos la propiedad 'focus' del CustomTextInput"""
@@ -154,15 +166,14 @@ class CustomTextInput(FloatLayout):
 
     def _on_touch_down(self, instance, touch):
         """Controla el comportamiento cuando se hace clic en el CustomTextInput"""
-        print('touch')
         if self.collide_point(*touch.pos):
+            print('abrir=',self.abrir)
             if self.abrir:
                 App.get_running_app().open_date_picker(self.input_field)
                 touch.grab(self)  # Agregar el toque al widget
                 self.abrir = False
             else:
                 self.abrir = True
-        
 
     def update_line(self, focused):
         if focused:
@@ -181,7 +192,9 @@ class CustomTextInput(FloatLayout):
             if key == 13 or key == 271:  # Cambia al siguiente textbox con Enter
                 if not self.multiline:
                     self.cambiar()
-                return True  # Evitar el comportamiento por defecto
+                    return True  # Evitar el comportamiento por defecto
+                else:
+                    return False
     def obtener_screen(self):
         actual = self
         while actual:
@@ -204,7 +217,6 @@ class CustomTextInput(FloatLayout):
                 return t
             else:
                 if t == actual:
-                    print('lo encontre')
                     encontrado = True
         return None
     def cambiar(self):
@@ -249,6 +261,9 @@ class CustomTextInput(FloatLayout):
                     self.error_message = self.error_message or ""
 
             self.ids.input_field.text = value
+        elif self.input_type == 'date':
+            if not self.validar_fecha(self.text):
+                self.error_message = "Fecha invalida"
 
     def on_text(self, instance, value):
         # Actualiza el TextInput interno cuando cambia la propiedad 'text'
@@ -257,6 +272,23 @@ class CustomTextInput(FloatLayout):
     def on_textinput_text(self, instance, value):
         # Sincroniza la propiedad 'text' con el contenido del TextInput
         self.text = value
+    def validar_fecha(self, fecha):
+        # Expresión regular para validar el formato yyyy-mm-dd
+        patron = r'^\d{4}-\d{2}-\d{2}$'
+        
+        # Verificar si la fecha coincide con el patrón
+        if not re.match(patron, fecha):
+            return False
+        
+        # Descomponer la fecha en año, mes y día
+        año, mes, dia = map(int, fecha.split('-'))
+        
+        # Verificar si la fecha es válida
+        try:
+            datetime(año, mes, dia)
+            return True
+        except ValueError:
+            return False
 
 class Inicio(Screen):
     def go_login(self):
@@ -333,6 +365,7 @@ class OohApp(App):
 
         return sm
     def open_date_picker(self, target_input):
+        print('abrir')
         date_picker = DatePicker(target_input=target_input)
         date_picker.bind(on_dismiss=self.on_date_selected)
         date_picker.open()

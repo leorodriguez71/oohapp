@@ -101,12 +101,13 @@
         size_hint_y: None
         height: '40dp'
         font_size: '18sp'
-        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        pos_hint: {'center_x': 0.5, 'center_y': 0.2}
         multiline: False
         padding: [10, 10, 10, 10]
         on_focus: root.update_line(self.focus)
         on_text: root.on_textinput_text(self, self.text)
         on_text_validate: root.validate_text(self, self.text)
+        valign: 'bottom'
 
     Label:
         id: error_label
@@ -192,12 +193,14 @@
                         hint_text: 'Usuario'
                         multiline: False
                         write_tab: False
+                        text: 'mant'
                     CustomTextInput:
                         id:txtPassword
                         hint_text: 'Password'
                         write_tab: False
                         multiline: False
                         password: True
+                        text: 'Pinamar2024'
                     RoundedNormalButton:
                         text: 'Inicio'
                         on_release: root.validar_usuario()
@@ -385,6 +388,8 @@
 <Mantenimiento>
     BoxLayout:
         orientation: 'vertical'
+        padding: 10
+        spacing: 10
         BoxLayout:
             size_hint: 1, .15
             canvas.before:
@@ -468,6 +473,7 @@
 
                 size_hint: .8,1
                 orientation: 'vertical'
+                padding: 10
                 BoxLayout:
                     orientation: 'vertical'
                     BoxLayout:
@@ -477,23 +483,20 @@
                         CustomTextInput: 
                             id: txtFecha
                             hint_text: 'Fecha'
-                            on_focus: if self.input_field.focus: app.open_date_picker(self.input_field)
+                            input_type: 'date'
                         WidgetCamera:
-
-                        CustomTextInput:
-                            id:txtAnexo1
-                            hint_text: 'Anexo 1'
-                        CustomTextInput:
-                            id:txtAnexo2
-                            hint_text: 'Anexo 2'
+                        WidgetCamera:
                         CustomTextInput:
                             id:txtObs
                             hint_text: 'Observacoes'
+                            input_type: 'note'
                     BoxLayout:
                         orientation: 'horizontal'
                         size_hint:1,.2
                         BoxLayout: 
                         BoxLayout: 
+                            spacing: 10
+                            padding: 10
                             orientation: 'vertical'
                             RoundedNormalButton:
                                 text: 'Enviar'
