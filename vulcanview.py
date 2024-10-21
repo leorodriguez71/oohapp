@@ -96,7 +96,7 @@ class VulcanView(BoxLayout):
         if self.row_selection:
             return self._filaActual
         else:
-            return GetNodelGrid(self, self._filaActual, self._columnaActual)
+            return self.GetNodelGrid(self, self._filaActual, self._columnaActual)
     def SetTextGrid(self, fila, columna, texto, adicional):
         for node in self.grilla.children:
             if node._tipo != 'T':

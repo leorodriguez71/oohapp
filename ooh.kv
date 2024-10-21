@@ -54,7 +54,8 @@
     spacing: 10
 
     RoundedNormalButton:
-        text: root.button_text
+        font_name: 'ttf/MaterialIcons-Regular.ttf'
+        text: '\ue412'
         size_hint_y: None
         height: '40dp'
         on_press: root.capture_photo()
@@ -485,7 +486,11 @@
                             hint_text: 'Fecha'
                             input_type: 'date'
                         WidgetCamera:
+                            id: picAdjunto1
+                            photo_name: 'adjunto1.jpg'
                         WidgetCamera:
+                            id: picAdjunto2
+                            photo_name: 'adjunto2.jpg'
                         CustomTextInput:
                             id:txtObs
                             hint_text: 'Observacoes'
@@ -498,10 +503,13 @@
                             spacing: 10
                             padding: 10
                             orientation: 'vertical'
+                            RoundedNormalButton: #send
+                                font_name: 'ttf/MaterialIcons-Regular.ttf'
+                                text: "\ue163"
+                                on_release: root.actualizar()
                             RoundedNormalButton:
-                                text: 'Enviar'
-                            RoundedNormalButton:
-                                text: 'Cancelar'
+                                font_name: 'ttf/MaterialIcons-Regular.ttf'
+                                text: '\ue5c9'
                         BoxLayout: 
             BoxLayout:
                 size_hint: .1,1

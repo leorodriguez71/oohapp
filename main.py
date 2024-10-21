@@ -5,9 +5,10 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.stacklayout import StackLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.spinner import Spinner
-from kivy.properties import ColorProperty, NumericProperty, BooleanProperty, StringProperty, OptionProperty, ObjectProperty
+from kivy.properties import ColorProperty, NumericProperty, BooleanProperty, StringProperty, OptionProperty, ObjectProperty, ListProperty
 import requests
 from kivy.uix.popup import Popup
 from kivy.graphics.texture import Texture
@@ -20,6 +21,7 @@ import re
 
 class RoundedNormalButton(Button):
     pass
+
 
 class DatePicker(Popup):
     selected_date = ObjectProperty(None)
@@ -82,7 +84,6 @@ class DatePicker(Popup):
 
 class WidgetCamera(BoxLayout):
     photo_name = StringProperty("foto.jpg")  # Propiedad para el nombre de la foto
-    button_text = StringProperty("Tomar foto")  # Texto del botón
     image_texture = None
 
     def __init__(self, **kwargs):
@@ -320,17 +321,43 @@ class Principal(Screen):
                 self.ids.vv.AddTitle("Direccion")
                 self.ids.vv.AddTitle("Fecha")
                 for mant in resp['data']:
-                    self.ids.vv.AddGrid(mant['codigo'], '')
+                    self.ids.vv.AddGrid(mant['codigo'], mant['id'])
                     self.ids.vv.AddGrid(mant['direccion'], '')
                     self.ids.vv.AddGrid(mant['fecha'], '')
         else:
             self.manager.current = 'Login'
             return
     def go_mant(self):
+        self.manager.mant_id = self.ids.vv.GetAdicionalGrid(self.ids.vv.GetSelectedRow(), 0)
         self.manager.current = 'Mantenimiento'
 
 class Mantenimiento(Screen):
-    pass
+    def actualizar(self):
+        if not hasattr(self.manager, 'sec_token'):
+            self.manager.current = 'Login'
+            return
+        headers = {
+            'Authorization': f'Token {self.manager.sec_token}',  
+        }
+        params = {
+            'usuario': self.manager.usuario,
+            'fecha': self.ids.txtFecha.text,
+            'obs': self.ids.txtObs.text,
+            'id': self.manager.mant_id,
+        }
+        files = {}
+        if self.ids.picAdjunto1.image_texture is not None:
+            with open(self.ids.picAdjunto1.photo_name, 'rb') as adjunto1:
+                files['adjunto1'] = adjunto1
+        if self.ids.picAdjunto2.image_texture is not None:
+            with open(self.ids.picAdjunto2.photo_name, 'rb') as adjunto2:
+                files['adjunto2'] = adjunto2
+        url = 'http://127.0.0.1:3000/api/mant/update'
+        response = requests.post(url, files = files, headers=headers, data = params)
+        if response.status_code == 200:
+            self.manager.current = 'Principal'
+        else:
+            print('error')
 
 class Login(Screen):
     def validar_usuario(self):
